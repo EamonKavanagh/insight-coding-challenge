@@ -13,17 +13,18 @@ public class Runner {
     public static void main(String[] args) {
         HashtagGraph htg = new HashtagGraph(60);
         
-        File tweets;
-        if (args.length > 0) {
-            tweets = new File(args[0]);
+        String tweetsFilename;
+        String outputFilename;
+        if (args.length > 1) {
+            tweetsFilename = args[0];
+            outputFilename = args[1];
         } else {
-            throw new IllegalArgumentException("No tweet file given");
+            throw new IllegalArgumentException("No specified input and output files");
         }
         
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(tweets));
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                           new FileOutputStream("output.txt"), "utf-8"));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(tweetsFilename)));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFilename), "utf-8"));
             
             String tweetData;
             while ((tweetData = reader.readLine()) != null) {
