@@ -62,6 +62,10 @@ public class Tweet {
         return (timestamp.getTime() - ts.getTime())/1000;
     }
     
+    public String toString() {
+        return Arrays.toString(hashtags) + ":" + timestamp.toString();
+    }
+    
     
     public static void main(String[] args) {
         File tweets;

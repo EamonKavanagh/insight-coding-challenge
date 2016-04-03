@@ -25,7 +25,7 @@ public class Runner {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(new File(tweetsFilename)));
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFilename), "utf-8"));
-            
+
             String tweetData;
             while ((tweetData = reader.readLine()) != null) {
                 
@@ -33,7 +33,8 @@ public class Runner {
                 if (!tweetData.contains("limit")) {
                     Tweet tweet = new Tweet(tweetData);
                     htg.processTweet(tweet);
-                    writer.write(String.format("%.2f", htg.averageDegree()));
+                    
+                    writer.write(String.format("%.3f", htg.averageDegree()).substring(0, 4));
                     writer.newLine();
                 }
             }

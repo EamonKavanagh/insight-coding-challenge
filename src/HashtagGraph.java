@@ -52,7 +52,7 @@ public class HashtagGraph {
                     
                     // Remove vertices if they're unconnected
                     if (V.get(edge.hashtag1) == 0) V.remove(edge.hashtag1);
-                    if (V.get(edge.hashtag2) == 0) V.remove(edge.hashtag1);
+                    if (V.get(edge.hashtag2) == 0) V.remove(edge.hashtag2);
                 }
                 
             } else {
@@ -83,6 +83,10 @@ public class HashtagGraph {
                         incrementOrSet(hashtags[i]);
                         incrementOrSet(hashtags[j]);
                     }
+                    
+                    // Add edge to priority queue
+                    Edge edge = new Edge(hashtags[i], hashtags[j], timestamp);
+                    edgePQ.add(edge);
                 }
             }
         }
@@ -100,14 +104,14 @@ public class HashtagGraph {
     public void processTweet(Tweet tweet) {
         long timeDif = tweet.timeBetween(latest);
         
-        // Check if tweet is out of window or has less than two hashtags
-        if (timeDif < window || tweet.getHashtags().length < 2) return;
-        
         // Check if tweet is the new latest, remove old edges if true
         if (timeDif > 0) {
             latest = new Date(tweet.getTimestamp().getTime());
             removeOldEdges();
         }
+        
+        // Check if tweet is out of window or has less than two hashtags
+        if (timeDif < window || tweet.getHashtags().length < 2) return;
         
         addEdges(tweet.getHashtags(), tweet.getTimestamp());
     }
