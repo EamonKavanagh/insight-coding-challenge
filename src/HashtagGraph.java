@@ -32,7 +32,24 @@ public class HashtagGraph {
         edgePQ = new PriorityQueue<Edge>();
     }
     
-    private void removeOldEdges() {
+    public void processTweet(Tweet tweet) {
+        long timeDif = tweet.timeBetween(latest);
+        
+        // Check if tweet is the new latest, remove old edges if true
+        if (timeDif > 0) {
+            latest = new Date(tweet.getTimestamp().getTime());
+            evictOldEdges();
+        }
+        
+        // Check if tweet is out of window or has less than two hashtags
+        if (timeDif < window || tweet.getHashtags().length < 2) {
+            return;
+        } else {
+            addEdges(tweet.getHashtags(), tweet.getTimestamp());
+        }
+    }
+    
+    private void evictOldEdges() {
         Iterator<Edge> iter = edgePQ.iterator();
         while (iter.hasNext()) {
             
@@ -101,22 +118,8 @@ public class HashtagGraph {
         }
     }
     
-    public void processTweet(Tweet tweet) {
-        long timeDif = tweet.timeBetween(latest);
-        
-        // Check if tweet is the new latest, remove old edges if true
-        if (timeDif > 0) {
-            latest = new Date(tweet.getTimestamp().getTime());
-            removeOldEdges();
-        }
-        
-        // Check if tweet is out of window or has less than two hashtags
-        if (timeDif < window || tweet.getHashtags().length < 2) return;
-        
-        addEdges(tweet.getHashtags(), tweet.getTimestamp());
-    }
-    
     public double averageDegree() {
+        // Multiply by two because only one edge is stored for each vertex
         if (V.size() > 0) return (double) 2*E.size()/V.size();
         else return 0;
     }
