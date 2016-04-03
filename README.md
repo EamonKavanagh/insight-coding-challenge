@@ -13,7 +13,7 @@ My main idea was to use hash maps to store the vertex and edge relationships whi
 
 ## Exectuion
 
-To execute the code use the _.run.sh_ script.
+To execute the code use the _run.sh_ script.
 
 	./run.sh
 
@@ -23,6 +23,6 @@ This will also handle the Gson dependency.
 
 Additional tests have been added in the _insight\_testsuite/tests_ folder.  This can be run by using the _run\_tests.sh_ script.
 
-	cd insight\_testsuite
-	./run\_tests.sh
+	cd insight_testsuite
+	./run_tests.sh
 
