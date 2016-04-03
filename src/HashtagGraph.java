@@ -1,37 +1,59 @@
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+
+
 
 public class HashtagGraph {
     
-    // TODO
-    // PROPERLY COUNT EDGES
-    // PROPERLY ADD AND UPDATE ELEMENTS IN MAP
-    // PROPERLY REMOVE ELEMENTS FROM MAP IF OUT OF WINDOW
-    
-    private final int WINDOW = -60;
-    
-    int E;
+    private final int window;
     private Date latest;
-    private PriorityQueue<Edge> edgePQ;
-    private HashMap<String, LinkedList<Edge>> hashtagMap;
     
-    public HashtagGraph() {
-        E = 0;
+    // Map of vertices to number of edges for maintaining up-to-date collection of vertices
+    private HashMap<String, Integer> V;
+    // Map of two hashtags that make up an edge to created at timestamp for maintaining up-to-date edges
+    private HashMap<String, Date> E;
+    private PriorityQueue<Edge> edgePQ;
+    
+    
+    
+    public HashtagGraph(int window) {
+        if (window < 0) throw new IllegalArgumentException("Window length is negative");                                                       
+        
+        this.window = -window;
         latest = new Date(0);
+        V = new HashMap<String, Integer>();
+        E = new HashMap<String, Date>();
         edgePQ = new PriorityQueue<Edge>();
-        hashtagMap = new HashMap<String, LinkedList<Edge>>();
     }
     
-    // Loop through Priority Queue and pick off edges that are out of the window
     private void removeOldEdges() {
         Iterator<Edge> iter = edgePQ.iterator();
         while (iter.hasNext()) {
+            
             Edge edge = iter.next();
-            if (edge.timeBetween(latest) < WINDOW) {
+            
+            // Check if edge is out of window
+            if (edge.timeBetween(latest) < window) {
                 iter.remove();
+                
+                // Check to see if currently stored edge is the one we're removing
+                if (edge.timestamp == E.get(edge.hashtag1 + edge.hashtag2)) {
+                    E.remove(edge.hashtag1 + edge.hashtag2);
+                    
+                    // Decrement number of edges for both vertices
+                    V.put(edge.hashtag1, V.get(edge.hashtag1)-1);
+                    V.put(edge.hashtag2, V.get(edge.hashtag2)-1);
+                    
+                    // Remove vertices if they're unconnected
+                    if (V.get(edge.hashtag1) == 0) V.remove(edge.hashtag1);
+                    if (V.get(edge.hashtag2) == 0) V.remove(edge.hashtag1);
+                }
                 
             } else {
                 // Priority Queue is ordered, no need to go further
@@ -41,37 +63,60 @@ public class HashtagGraph {
     }
     
     private void addEdges(String[] hashtags, Date timestamp) {
+        // Sort hashtag array so hashtags in edges are in order
+        Arrays.sort(hashtags);
+        
         for (int i = 0; i < hashtags.length; i++) {
             for (int j = i+1; j < hashtags.length; j++) {
+                
                 // Ignore self loops
                 if (!hashtags[i].equals(hashtags[j])) {
-                    Edge edge = new Edge(hashtags[i], hashtags[j], timestamp);
                     
-                    edgePQ.add(edge);
+                    // Check if edge already exists and update it if the timestamp is greater
+                    if (E.containsKey(hashtags[i] + hashtags[j])) {
+                        if (timestamp.compareTo(E.get(hashtags[i] + hashtags[j])) == 1) {
+                            E.put(hashtags[i] + hashtags[j], timestamp);
+                        }
+                    // Add new edge   
+                    } else {
+                        E.put(hashtags[i] + hashtags[j], timestamp);
+                        incrementOrSet(hashtags[i]);
+                        incrementOrSet(hashtags[j]);
+                    }
                 }
             }
+        }
+    }
+    
+    // Increment value in vertex map or add and set to 1
+    private void incrementOrSet(String hashtag) {
+        if (V.containsKey(hashtag)) {
+            V.put(hashtag, V.get(hashtag)+1);
+        } else {
+            V.put(hashtag, 1);
         }
     }
     
     public void processTweet(Tweet tweet) {
         long timeDif = tweet.timeBetween(latest);
         
-        // Check if tweet is out of window or has less than two hashtags 
-        if (timeDif < WINDOW || tweet.getHashtags().length < 2) return;
+        // Check if tweet is out of window or has less than two hashtags
+        if (timeDif < window || tweet.getHashtags().length < 2) return;
         
-        // Check if tweet is the new latest
+        // Check if tweet is the new latest, remove old edges if true
         if (timeDif > 0) {
-            latest = tweet.getTimestamp();
+            latest = new Date(tweet.getTimestamp().getTime());
             removeOldEdges();
         }
         
         addEdges(tweet.getHashtags(), tweet.getTimestamp());
     }
     
-    public float averageDegree() {
-        if (hashtagMap.size() > 0) return E/hashtagMap.size();
+    public double averageDegree() {
+        if (V.size() > 0) return (double) 2*E.size()/V.size();
         else return 0;
     }
+    
     
     private class Edge implements Comparable<Edge> {
         
@@ -85,8 +130,8 @@ public class HashtagGraph {
             this.timestamp = timestamp;
         }
         
-        public long timeBetween(Date timestamp) {
-            return (this.timestamp.getTime() - timestamp.getTime())/1000;
+        public long timeBetween(Date ts) {
+            return (timestamp.getTime() - ts.getTime())/1000;
         }
         
         public int compareTo(Edge that) {
@@ -95,11 +140,10 @@ public class HashtagGraph {
             else if (t > 0) return 1;
             else return 0;
         }
-        
-        public boolean equals(Edge that) {
-            return this.timestamp.equals(that.timestamp) && 
-                   ((this.hashtag1.equals(that.hashtag1) && this.hashtag2.equals(that.hashtag2)) ||
-                   (this.hashtag1.equals(that.hashtag2) && this.hashtag2.equals(that.hashtag1)));
-        }
+    }
+    
+    
+    public static void main(String[] args) {
+
     }
 }

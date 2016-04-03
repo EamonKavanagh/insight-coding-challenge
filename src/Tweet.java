@@ -1,13 +1,16 @@
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 
 public class Tweet {
@@ -22,6 +25,7 @@ public class Tweet {
         
         JsonElement createdAt = tweetJson.get("created_at");
         if (createdAt == null) throw new IllegalArgumentException("Not a valid tweet");
+        
         setTimestamp(createdAt.getAsString());
         
         JsonElement tags = tweetJson.get("entities").getAsJsonObject().get("hashtags");
@@ -36,7 +40,6 @@ public class Tweet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(timestamp);
     }
     
     private void setHashtags(JsonArray tags) {
@@ -48,15 +51,15 @@ public class Tweet {
     }
     
     public Date getTimestamp() {
-        return timestamp;
+        return new Date(timestamp.getTime());
     }
     
     public String[] getHashtags() {
-        return hashtags;
+        return Arrays.copyOf(hashtags, hashtags.length);
     }
     
-    public long timeBetween(Date timestamp) {
-        return (this.timestamp.getTime() - timestamp.getTime())/1000;
+    public long timeBetween(Date ts) {
+        return (timestamp.getTime() - ts.getTime())/1000;
     }
     
     
@@ -68,14 +71,14 @@ public class Tweet {
             throw new IllegalArgumentException("No tweet file given");
         }
         
-        Tweet tweet;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(tweets));
             String tweetData;
             while ((tweetData = reader.readLine()) != null) {
-                tweet = new Tweet(tweetData);
+                Tweet tweet = new Tweet(tweetData);
             }
-        } catch (Exception e) {
+            reader.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
