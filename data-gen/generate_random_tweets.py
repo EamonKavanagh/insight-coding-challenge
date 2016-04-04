@@ -172,18 +172,18 @@ inputPath = "./../insight_testsuite/tests/test-random-tweets/tweet_input/tweets.
 outputPath = "./../insight_testsuite/tests/test-random-tweets/tweet_output/output.txt"
 with open(inputPath, "w") as tweets, open(outputPath, "w") as output:
 	for i in xrange(N):
-		# Roughly 1/20 times  is a rate limit message, don't write output
+		# Roughly 1 out of 20 times  is a rate limit message, don't write output
 		if random.random() < .05:
 			tweets.write(rateLimitMessage + "\n")
 			
 		else:
-			#Roughly 1/10 times we jump ahead one day in time and dump all old tweets
+			#Roughly 1 out of 10 times we jump ahead one day in time
 			if (random.random() < .1):
 				ts = datetime.strptime(tweet['created_at'], format)
 				ts += timedelta(1)
 				ts = ts.strftime(format)
 				tweet['created_at'] = ts
-				# Reset collection of hashtags added
+				# Dump selected set
 				selected = set()
 				
 			randomSelect = random.randint(1,5)
