@@ -1,16 +1,12 @@
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-import java.text.SimpleDateFormat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
 
 
 public class Tweet {
@@ -60,30 +56,5 @@ public class Tweet {
     
     public long timeBetween(Date ts) {
         return (timestamp.getTime() - ts.getTime())/1000;
-    }
-    
-    public String toString() {
-        return Arrays.toString(hashtags) + ":" + timestamp.toString();
-    }
-    
-    
-    public static void main(String[] args) {
-        File tweets;
-        if (args.length > 0) {
-            tweets = new File(args[0]);
-        } else {
-            throw new IllegalArgumentException("No tweet file given");
-        }
-        
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(tweets));
-            String tweetData;
-            while ((tweetData = reader.readLine()) != null) {
-                Tweet tweet = new Tweet(tweetData);
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

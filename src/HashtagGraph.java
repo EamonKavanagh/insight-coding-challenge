@@ -1,12 +1,8 @@
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.PriorityQueue;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-
 
 
 public class HashtagGraph {
@@ -37,7 +33,7 @@ public class HashtagGraph {
         
         // Check if tweet is the new latest, remove old edges if true
         if (timeDif > 0) {
-            latest = new Date(tweet.getTimestamp().getTime());
+            latest = tweet.getTimestamp();
             evictOldEdges();
         }
         
@@ -147,10 +143,5 @@ public class HashtagGraph {
             else if (t > 0) return 1;
             else return 0;
         }
-    }
-    
-    
-    public static void main(String[] args) {
-
     }
 }
