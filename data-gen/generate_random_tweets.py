@@ -172,8 +172,8 @@ inputPath = "./../insight_testsuite/tests/test-random-tweets/tweet_input/tweets.
 outputPath = "./../insight_testsuite/tests/test-random-tweets/tweet_output/output.txt"
 with open(inputPath, "w") as tweets, open(outputPath, "w") as output:
 	for i in xrange(N):
-		# Roughly 1/25 times  is a rate limit message, don't write output
-		if random.random() < .04:
+		# Roughly 1/20 times  is a rate limit message, don't write output
+		if random.random() < .05:
 			tweets.write(rateLimitMessage + "\n")
 			
 		else:
