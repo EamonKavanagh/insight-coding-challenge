@@ -10,8 +10,6 @@ import java.io.OutputStreamWriter;
 public class Runner {
     
     public static void main(String[] args) {
-        HashtagGraph htg = new HashtagGraph(60);
-        
         String tweetsFilename;
         String outputFilename;
         if (args.length > 1) {
@@ -24,7 +22,8 @@ public class Runner {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(new File(tweetsFilename)));
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFilename), "utf-8"));
-
+            
+            HashtagGraph htg = new HashtagGraph(60);
             String tweetData;
             while ((tweetData = reader.readLine()) != null) {
                 

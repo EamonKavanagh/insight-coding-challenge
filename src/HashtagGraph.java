@@ -9,17 +9,16 @@ public class HashtagGraph {
     
     private final int window;
     private Date latest;
-    
-    // Map of vertices to number of edges for maintaining up-to-date collection of vertices
+    // Hashmap of vertices to number of edges
     private HashMap<String, Integer> V;
-    // Map of two hashtags that make up an edge to created at timestamp for maintaining up-to-date edges
+    // Hashmap of two hashtags to created at timestamp
     private HashMap<String, Date> E;
+    // Priority queue for maintaining ordered collection of edges
     private PriorityQueue<Edge> edgePQ;
     
     
-    
     public HashtagGraph(int window) {
-        if (window < 0) throw new IllegalArgumentException("Window length is negative");                                                       
+        if (window < 0) throw new IllegalArgumentException("Window length is negative");
         
         this.window = -window;
         latest = new Date(0);
