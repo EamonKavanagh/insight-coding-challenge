@@ -1,6 +1,6 @@
 ## Insight Data Engineering Coding Challenge
 
-A Java solution to the Insight Data Engineering coding challenge (April 2016).
+A Java solution to the Insight Data Engineering coding challenge (April 2016).  The challenge was to build a Twitter hashtag graph of tweets in a 60 second window with the goal of displaying the average degree as tweets streamed in.  A description of the challenge can be found here: https://github.com/InsightDataScience/coding-challenge.
 
 ## Description
 
