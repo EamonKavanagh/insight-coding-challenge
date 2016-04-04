@@ -1,7 +1,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -14,17 +13,15 @@ public class Tweet {
     private String[] hashtags;
     private Date timestamp;
     
-    public Tweet(String tweet) {
+    public Tweet(JsonObject tweet) {
         if (tweet == null) throw new NullPointerException("Tweet text is null");
         
-        JsonObject tweetJson = new JsonParser().parse(tweet).getAsJsonObject();
-        
-        JsonElement createdAt = tweetJson.get("created_at");
+        JsonElement createdAt = tweet.get("created_at");
         if (createdAt == null) throw new IllegalArgumentException("Not a valid tweet");
         
         setTimestamp(createdAt.getAsString());
         
-        JsonElement tags = tweetJson.get("entities").getAsJsonObject().get("hashtags");
+        JsonElement tags = tweet.get("entities").getAsJsonObject().get("hashtags");
         setHashtags(tags.getAsJsonArray());
     }
     

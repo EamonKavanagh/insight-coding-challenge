@@ -1,3 +1,6 @@
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,12 +27,13 @@ public class Run {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFilename), "utf-8"));
             
             HashtagGraph htg = new HashtagGraph(60);
-            String tweetData;
-            while ((tweetData = reader.readLine()) != null) {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 
+                JsonObject tweetJson = new JsonParser().parse(line).getAsJsonObject();
                 // Do not process rate limit messages
-                if (!tweetData.contains("limit")) {
-                    Tweet tweet = new Tweet(tweetData);
+                if (tweetJson.get("limit") == null) {
+                    Tweet tweet = new Tweet(tweetJson);
                     htg.processTweet(tweet);
                     
                     writer.write(String.format("%.3f", htg.averageDegree()).substring(0, 4));
