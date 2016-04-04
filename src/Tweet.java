@@ -13,15 +13,15 @@ public class Tweet {
     private String[] hashtags;
     private Date timestamp;
     
-    public Tweet(JsonObject tweet) {
-        if (tweet == null) throw new NullPointerException("Tweet text is null");
+    public Tweet(JsonObject tweetJson) {
+        if (tweetJson == null) throw new NullPointerException("Tweet text is null");
         
-        JsonElement createdAt = tweet.get("created_at");
+        JsonElement createdAt = tweetJson.get("created_at");
         if (createdAt == null) throw new IllegalArgumentException("Not a valid tweet");
         
         setTimestamp(createdAt.getAsString());
         
-        JsonElement tags = tweet.get("entities").getAsJsonObject().get("hashtags");
+        JsonElement tags = tweetJson.get("entities").getAsJsonObject().get("hashtags");
         setHashtags(tags.getAsJsonArray());
     }
     
