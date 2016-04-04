@@ -6,10 +6,6 @@ if [ ! -f ./src/gson-2.6.2.jar ]; then
 	printf "Finished downloading\n\n"
 fi
 
-printf "Compiling code\n\n"
 javac -cp ./src/gson-2.6.2.jar ./src/Tweet.java ./src/HashtagGraph.java ./src/Runner.java
 
-printf "Running code with tweets from tweet_input/tweets.txt\n\n"
 java -cp ./src/gson-2.6.2.jar:./src Runner ./tweet_input/tweets.txt ./tweet_output/output.txt
-
-printf "Finished!\n"
