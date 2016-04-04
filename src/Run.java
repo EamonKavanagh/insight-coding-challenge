@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 
-public class Runner {
+public class Run {
     
     public static void main(String[] args) {
         String tweetsFilename;

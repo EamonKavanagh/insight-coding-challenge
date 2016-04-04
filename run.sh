@@ -6,6 +6,6 @@ if [ ! -f ./src/gson-2.6.2.jar ]; then
 	printf "Finished downloading\n\n"
 fi
 
-javac -cp ./src/gson-2.6.2.jar ./src/Tweet.java ./src/HashtagGraph.java ./src/Runner.java
+javac -cp ./src/gson-2.6.2.jar ./src/Tweet.java ./src/HashtagGraph.java ./src/Run.java
 
-java -cp ./src/gson-2.6.2.jar:./src Runner ./tweet_input/tweets.txt ./tweet_output/output.txt
+java -cp ./src/gson-2.6.2.jar:./src Run ./tweet_input/tweets.txt ./tweet_output/output.txt
