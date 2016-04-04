@@ -28,16 +28,14 @@ public class HashtagGraph {
     }
     
     public void processTweet(Tweet tweet) {
-        long timeDif = tweet.timeBetween(latest);
-        
         // Check if tweet is the new latest, remove old edges if true
-        if (timeDif > 0) {
+        if (aheadOfWindow(tweet)) {
             latest = tweet.getTimestamp();
             evictOldEdges();
         }
         
         // Check if tweet is out of window or has less than two hashtags
-        if (timeDif < window || tweet.getHashtags().length < 2) {
+        if (outOfWindow(tweet) || tweet.getHashtags().length < 2) {
             return;
         } else {
             addEdges(tweet.getHashtags(), tweet.getTimestamp());
@@ -51,7 +49,7 @@ public class HashtagGraph {
             Edge edge = iter.next();
             
             // Check if edge is out of window
-            if (edge.timeBetween(latest) < window) {
+            if (outOfWindow(edge)) {
                 iter.remove();
                 
                 // Check to see if currently stored edge is the one we're removing
@@ -104,6 +102,24 @@ public class HashtagGraph {
         }
     }
     
+    public double averageDegree() {
+        // Multiply by two because only one edge is stored for each vertex
+        if (V.size() > 0) return (double) 2*E.size()/V.size();
+        else return 0;
+    }
+    
+    private boolean aheadOfWindow(Tweet tweet) {
+        return tweet.timeBetween(latest) > 0;
+    }
+    
+    private boolean outOfWindow(Tweet tweet) {
+        return tweet.timeBetween(latest) < window;
+    }
+    
+    private boolean outOfWindow(Edge edge) {
+        return edge.timeBetween(latest) < window;
+    }
+    
     // Increment value in vertex map or add and set to 1
     private void incrementOrSet(String hashtag) {
         if (V.containsKey(hashtag)) {
@@ -111,12 +127,6 @@ public class HashtagGraph {
         } else {
             V.put(hashtag, 1);
         }
-    }
-    
-    public double averageDegree() {
-        // Multiply by two because only one edge is stored for each vertex
-        if (V.size() > 0) return (double) 2*E.size()/V.size();
-        else return 0;
     }
     
     

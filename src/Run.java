@@ -36,7 +36,9 @@ public class Run {
                     Tweet tweet = new Tweet(tweetJson);
                     htg.processTweet(tweet);
                     
-                    writer.write(String.format("%.3f", htg.averageDegree()).substring(0, 4));
+                    double val = (double)(int) (htg.averageDegree()*100);
+                    double avg = val/100;
+                    writer.write(String.format("%.2f", avg));
                     writer.newLine();
                 }
             }
