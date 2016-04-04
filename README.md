@@ -21,7 +21,7 @@ This will also handle the Gson dependency.
 
 ## Tests
 
-Additional tests have been added in the _insight\_testsuite/tests_ folder.  This can be run by using the _run\_tests.sh_ script.
+Additional tests have been added in the _insight\_testsuite/tests_ folder.  This can be run by using the _run\_tests.sh_ script.  The _run.sh_ script should be executed once before running the tests so dependencies aren’t downloaded multiple times.
 
 	cd insight_testsuite
 	./run_tests.sh
