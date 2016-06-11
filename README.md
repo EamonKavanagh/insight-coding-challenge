@@ -1,6 +1,6 @@
-## Insight Data Engineering Coding Challenge
+# Insight Data Engineering Coding Challenge
 
-A Java solution to the Insight Data Engineering coding challenge (April 2016).  The challenge was to calculate the average degree of a vertex in a Twitter hashtag graph for the last 60 seconds, and update this each time a new tweet appears.  A detailed description of the challenge can be found here: https://github.com/InsightDataScience/coding-challenge.
+A Java solution to the Insight Data Engineering coding challenge (April 2016).  The challenge was to calculate the average degree of a vertex in a Twitter hashtag graph for the last 60 seconds, and update this each time a new tweet appears.
 
 ## Description
 
